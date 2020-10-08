@@ -3,9 +3,10 @@ import configparser
 import requests
 #from googleMap import ???
 
+#read the bot_conf.cfg
 config = configparser.ConfigParser()
 config.sections()
-config.read('bot.conf')
+config.read('bot_conf.cfg',encoding="utf-8-sig")
 
 bot = telebot.TeleBot(config['DEFAULTS']['bot_token'], parse_mode=None)
 
@@ -30,6 +31,9 @@ def Dogs(message):
     bot.send_photo(message.chat.id, data[0]['url'])
 
 
+@bot.message_handler(commands=['yellowshop'])
+def YellowShop(message):
+    bot.send_message(message.chat.id, hki, parse_mode=None)
 
-
+bot.polling(none_stop=True)
 
