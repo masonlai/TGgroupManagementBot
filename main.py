@@ -1,16 +1,35 @@
-# This is a sample Python script.
+import telebot
+import configparser
+import requests
+#from googleMap import ???
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+config = configparser.ConfigParser()
+config.sections()
+config.read('bot.conf')
+
+bot = telebot.TeleBot(config['DEFAULTS']['bot_token'], parse_mode=None)
+
+hki = config['DEFAULTS']['hki']
+kw = config['DEFAULTS']['kw']
+nt = config['DEFAULTS']['nt']
+oi = config['DEFAULTS']['oi']
+
+@bot.message_handler(commands=['pudding'])
+def Cats(message):
+    URL = 'https://api.thecatapi.com/v1/images/search?size=full'
+    r = requests.get(url=URL)
+    data = r.json()
+    bot.send_photo(message.chat.id, data[0]['url'])
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+@bot.message_handler(commands=['foolishdog'])
+def Dogs(message):
+    URL = 'https://api.thedogapi.com/v1/images/search?size=full'
+    r = requests.get(url=URL)
+    data = r.json()
+    bot.send_photo(message.chat.id, data[0]['url'])
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('test push')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+
