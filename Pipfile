@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 pytelegrambotapi = "*"
 requests = "*"
-yahoo-finance = "*"
+yfinance = "*"
 
 [requires]
 python_version = "3.8"

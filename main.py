@@ -3,7 +3,7 @@ import configparser
 import requests
 from telebot import types
 from pprint import pprint
-from yahoo_finance import Share
+import yfinance as yf
 
 # from googleMap import ???
 
@@ -38,14 +38,18 @@ def Dogs(message):
 
 @bot.message_handler(commands=['yellowshop'])
 def YellowShop(message):
-    bot.send_message(message.chat.id, hki, parse_mode=None)
+    area = '旺角'
+    type = '日式'
+    list_type = requests.get(root_api + 'area_type', params={"area": area})
+    list = requests.get(config['DEFAULTS']['list_api'] + 'shop', params={"area": area, "type": type})
+    bot.send_message(message.chat.id, list, parse_mode=None)
 
 
 @bot.message_handler(commands=['stock'])
 def Stock(message):
-    #content = (message.text).split(' ')[1]
-    yahoo = Share('YHOO')
-    bot.send_message(message.chat.id, yahoo.get_price(), parse_mode=None)
+    content = (message.text).split(' ')[1]
+    stock = yf.Ticker(content)
+    bot.send_message(message.chat.id, stock.info['returns'], parse_mode=None)
 
 
 
