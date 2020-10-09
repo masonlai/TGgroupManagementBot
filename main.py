@@ -1,12 +1,16 @@
 import telebot
 import configparser
 import requests
-#from googleMap import ???
+from telebot import types
+from pprint import pprint
+from yahoo_finance import Share
 
-#read the bot_conf.cfg
+# from googleMap import ???
+
+# read the bot_conf.cfg
 config = configparser.ConfigParser()
 config.sections()
-config.read('bot_conf.cfg',encoding="utf-8-sig")
+config.read('bot_conf.cfg', encoding="utf-8-sig")
 
 bot = telebot.TeleBot(config['DEFAULTS']['bot_token'], parse_mode=None)
 
@@ -14,6 +18,7 @@ hki = config['DEFAULTS']['hki']
 kw = config['DEFAULTS']['kw']
 nt = config['DEFAULTS']['nt']
 oi = config['DEFAULTS']['oi']
+
 
 @bot.message_handler(commands=['pudding'])
 def Cats(message):
@@ -35,5 +40,14 @@ def Dogs(message):
 def YellowShop(message):
     bot.send_message(message.chat.id, hki, parse_mode=None)
 
-bot.polling(none_stop=True)
 
+@bot.message_handler(commands=['stock'])
+def Stock(message):
+    #content = (message.text).split(' ')[1]
+    yahoo = Share('YHOO')
+    bot.send_message(message.chat.id, yahoo.get_price(), parse_mode=None)
+
+
+
+
+bot.polling(none_stop=True)
