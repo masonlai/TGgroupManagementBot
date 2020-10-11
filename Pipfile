@@ -9,6 +9,9 @@ verify_ssl = true
 pytelegrambotapi = "*"
 requests = "*"
 yfinance = "*"
+sklearn = "*"
+matplotlib = "*"
+mplfinance = "*"
 
 [requires]
 python_version = "3.8"

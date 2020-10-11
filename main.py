@@ -1,8 +1,8 @@
 import telebot
 import configparser
 import requests
-from telebot import types
-from pprint import pprint
+
+import mplfinance as mpf
 import yfinance as yf
 
 # from googleMap import ???
@@ -45,12 +45,22 @@ def YellowShop(message):
     bot.send_message(message.chat.id, list, parse_mode=None)
 
 
-@bot.message_handler(commands=['stock'])
-def Stock(message):
-    content = (message.text).split(' ')[1]
-    stock = yf.Ticker(content)
-    bot.send_message(message.chat.id, stock.info['returns'], parse_mode=None)
-
+# @bot.message_handler(commands=['lovecfu'])
+# def Stock(message):
+#     try:
+#         msft = yf.Ticker(message.text.split(' ')[1])
+#         ohlc = msft.history(period="1mo")
+#         ohlc.index.name = 'Date'
+#         ohlc.shape
+#         ohlc.head(3)
+#         ohlc.tail(3)
+#         mpf.plot(ohlc, type='candle',savefig='chart.png',style='charles')
+#         photo = open('chart.png', 'rb')
+#         bot.send_message(message.chat.id, "資料來源Yahoo Finance唔準唔負責", parse_mode=None)
+#         bot.send_photo(message.chat.id, photo)
+#
+#     except TypeError as e:
+#         bot.send_message(message.chat.id, '傻仔{0}, 淨係睇到美股. 一係你比錢我買API'.format(message.from_user.username), parse_mode=None)
 
 
 
