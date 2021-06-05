@@ -1,33 +1,46 @@
 import telebot
 import configparser
 import requests
-import sqlite3
 import mplfinance as mpf
 import yfinance as yf
 import dbutil
 import time
 import threading
 import os
+import logging
 
 config = configparser.ConfigParser()
 config.sections()
 config.read('bot_conf.cfg', encoding="utf-8-sig")
 bot = telebot.TeleBot(os.getenv('TOKEN'), parse_mode=None)
 botSentMsg = []
+logging.basicConfig(filename='tgBotLog.log',
+                            filemode='a',level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S',  format='%(asctime)s %(levelname)-8s %(message)s')
 
 
 @bot.message_handler(commands=['pudding'])
 def Cats(message):
-    bot.delete_message(message.chat.id, message.message_id)
-    URL = 'https://api.thecatapi.com/v1/images/search?size=full'
-    r = requests.get(url=URL)
-    data = r.json()
-    botSentMsg.append(bot.send_photo(message.chat.id, data[0]['url']))
+    logging.info("User:%s ,Using function: %s" % (message.from_user.username, "cat"))
+    try:
+        try:
+            bot.delete_message(message.chat.id, message.message_id)
+        except:
+            logging.info("no right to delete msg, Group:%s".format(message.chat.title))
+        URL = 'https://api.thecatapi.com/v1/images/search?size=full'
+        r = requests.get(url=URL)
+        data = r.json()
+        botSentMsg.append(bot.send_photo(message.chat.id, data[0]['url']))
+    except Exception as e:
+        logging.error("unexpected error: %s".format(e))
 
 
 @bot.message_handler(commands=['foolishdog'])
 def Dogs(message):
-    bot.delete_message(message.chat.id, message.message_id)
+    logging.info("User:%s ,Using function: %s" % (message.from_user.username, "dogs"))
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(message.chat.title))
     URL = 'https://api.thedogapi.com/v1/images/search?size=full'
     r = requests.get(url=URL)
     data = r.json()
@@ -36,7 +49,12 @@ def Dogs(message):
 
 @bot.message_handler(commands=['lovecfu'])
 def Stock(message):
-    bot.delete_message(message.chat.id, message.message_id)
+    logging.info("User:%s ,Using function: %s" % (message.from_user.username, "lovecfu"))
+
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(message.chat.title))
     try:
         msft = yf.Ticker(message.text.split(' ')[1])
         ohlc = msft.history(period="1mo")
@@ -57,14 +75,21 @@ def Stock(message):
 
 @bot.message_handler(commands=['get'])
 def get(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "get"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     print(msg)
-
 
 
 @bot.message_handler(commands=['approve'])
 def approve(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "approve"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     if msg.from_user.id == 937935148:
         try:
             if msg.reply_to_message != None:
@@ -78,7 +103,11 @@ def approve(msg):
 
 @bot.message_handler(commands=['reg'])
 def approve(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "approve"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     approverList = dbutil.getApprovers()
     if msg.from_user.id in approverList:
         if msg.reply_to_message != None:
@@ -90,7 +119,11 @@ def approve(msg):
 
 @bot.message_handler(commands=['dereg'])
 def approve(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "dereg"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     approverList = dbutil.getApprovers()
     if msg.from_user.id in approverList:
         if msg.reply_to_message != None:
@@ -102,7 +135,11 @@ def approve(msg):
 
 @bot.message_handler(commands=['refuse'])
 def refuse(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "refuse"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     if msg.from_user.id == 937935148:
         if msg.reply_to_message != None:
             dbutil.deleteApproveList(msg.reply_to_message.from_user.id)
@@ -113,7 +150,11 @@ def refuse(msg):
 
 @bot.message_handler(commands=['callup'])
 def callup(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "callup"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     approverList = dbutil.getApprovers()
     if msg.from_user.id in approverList:
         callupList = dbutil.getCallList()
@@ -126,21 +167,30 @@ def callup(msg):
         botSentMsg.append(bot.send_message(msg.chat.id, '含撚啦,你邊個啊?',
                                            parse_mode=None))
 
+
 @bot.message_handler(commands=['clear'])
-def callup(msg):
-    bot.delete_message(msg.chat.id, msg.message_id)
+def clear(msg):
+    logging.info("User:%s ,Using function: %s" % (msg.from_user.username, "clear"))
+    try:
+        bot.delete_message(msg.chat.id, msg.message_id)
+    except:
+        logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
     deleteMsg()
+
 
 def cronJob():
     while (True):
-        if len(botSentMsg)>0:
+        if len(botSentMsg) > 0:
             time.sleep(5 * 60)
             deleteMsg()
 
 
 def deleteMsg():
     for i in botSentMsg:
-        bot.delete_message(i.chat.id, i.message_id)
+        try:
+            bot.delete_message(i.chat.id, i.message_id)
+        except:
+            logging.info("no right to delete msg, Group:%s".format(i.chat.title))
     botSentMsg.clear()
 
 
