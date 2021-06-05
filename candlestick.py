@@ -1,18 +1,14 @@
-
-import mplfinance as mpf
-import yfinance as yf
-import datetime as DT
+import dbutil
 
 
-msft = yf.Ticker("MSFT")
-history = msft.history(period="max")
-today = DT.datetime.now().strftime("%Y-%m-%d")
-previous = (DT.datetime.now() - DT.timedelta(days=7)).strftime("%Y-%m-%d")
-ohlc = history.loc[previous: today,]
+#dbutil.updateApprover(32126)
 
+# print(dbutil.getCallList())
+# print(dbutil.getApprovers())
 
-ohlc.index.name = 'Date'
-ohlc.shape
-ohlc.head(3)
-ohlc.tail(3)
-mpf.plot(ohlc,type='candle')
+a=[1,2,3,5,6,7,7,8,2,1]
+
+for i in a:
+    print(i)
+a.clear()
+print(a,"d")
