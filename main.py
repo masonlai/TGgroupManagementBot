@@ -197,4 +197,4 @@ def deleteMsg():
 added_thread = threading.Thread(target=cronJob, name='new_added_thread')
 added_thread.start()
 
-bot.polling(none_stop=True,interval=1)
+bot.polling(none_stop=False,interval=1)
