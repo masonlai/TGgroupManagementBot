@@ -80,7 +80,7 @@ def get(msg):
         bot.delete_message(msg.chat.id, msg.message_id)
     except:
         logging.info("no right to delete msg, Group:%s".format(msg.chat.title))
-    print(msg)
+    print(msg.reply_to_message.from_user.id)
 
 
 @bot.message_handler(commands=['approve'])
@@ -178,11 +178,18 @@ def clear(msg):
     deleteMsg()
 
 
-def cronJob():
-    while (True):
-        if len(botSentMsg) > 0:
-            time.sleep(5 * 60)
-            deleteMsg()
+@bot.message_handler(func=lambda m: True)
+def echo_all(message):
+    if message.from_user.id == 876967414:
+        bot.delete_message(message.chat.id, message.message_id)
+
+	# bot.reply_to(message, message.text)
+
+# def cronJob():
+#     while (True):
+#         if len(botSentMsg) > 0:
+#             time.sleep(5 * 60)
+#             deleteMsg()
 
 
 def deleteMsg():
@@ -193,8 +200,8 @@ def deleteMsg():
             logging.info("no right to delete msg, Group:%s".format(i.chat.title))
     botSentMsg.clear()
 
-
-added_thread = threading.Thread(target=cronJob, name='new_added_thread')
-added_thread.start()
+#
+# added_thread = threading.Thread(target=cronJob, name='new_added_thread')
+# added_thread.start()
 
 bot.polling(none_stop=True)
