@@ -18,5 +18,5 @@
 
 ```
 export TOKEN=your bot token
-python
+python main.py
 ```
