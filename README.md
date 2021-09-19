@@ -15,6 +15,7 @@
   - /dereg deregister a user out of the callup list
 
 ------------------------------------------------
+### Development
 
 ```
 export TOKEN=your bot token
